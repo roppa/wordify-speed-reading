@@ -1,0 +1,31 @@
+  <script src="js/jquery.min.js"></script>
+  <script src="js/underscore-min.js"></script>
+  <script src="js/backbone-min.js"></script>
+  <script src="js/wordify.js"></script>
+  <script>
+
+    "use strict";
+
+    var urlInput = $('input[name="content-url"]');
+    var text = "";
+    var textData;
+
+    $('#url-form').on('submit', function (event) {
+
+      event.stopPropagation();
+      event.preventDefault();
+      
+      $.ajax({
+        url: "/api/",
+        method: 'post',
+        data: {url : urlInput.val()},
+        success: function (result) {
+          text = result.data;
+          textData = wordify.stats(text);
+          console.log(text);
+          console.log(textData);
+        }});
+      
+    });
+  </script>
+  
