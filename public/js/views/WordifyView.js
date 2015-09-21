@@ -36,6 +36,22 @@ var WordifyView = Backbone.View.extend({
       this.player.count++;
     }.bind(this), this.player.wpm);
 
+    // this.player.anim = function (timestamp) {
+
+    // }:
+
+    // function step(timestamp) {
+    //   if (!start) start = timestamp;
+    //   var progress = timestamp - start;
+    //   element.style.left = Math.min(progress/10, 200) + "px";
+    //   if (progress < 2000) {
+    //     window.requestAnimationFrame(step);
+    //   }
+    // }
+
+    // window.requestAnimationFrame(step);
+
+
   },
 
   pause: function () {
@@ -52,20 +68,6 @@ var WordifyView = Backbone.View.extend({
   },
 
   render: function() {
-
-    // this.player.anim = function () {
-
-    // }:
-    // function step(timestamp) {
-    //   if (!start) start = timestamp;
-    //   var progress = timestamp - start;
-    //   element.style.left = Math.min(progress/10, 200) + "px";
-    //   if (progress < 2000) {
-    //     window.requestAnimationFrame(step);
-    //   }
-    // }
-
-    // window.requestAnimationFrame(step);
      
     this.player.chunks = wordify.chunk(this.model.get('text'), 2)
 
