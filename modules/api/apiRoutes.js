@@ -21,12 +21,19 @@ router.post('/', function(req, res) {
   jsdom.env(
     url,
     function (err, window) {
+      var page;
       if (err) {
         res.json({ error : err });
       }
+      //semantic schema.org (guardian), proprietary (BBC)
+      page = window.document.querySelector("div[itemprop='articleBody']") || window.document.querySelector("[property='articleBody']");
       //lets start using schema.org
-      text = window.document.querySelector("div[itemprop='articleBody']").textContent.replace(/\r?\n|\r/g, " ");
-      res.json({ data: text });
+      if (page) {
+        text = page.textContent.replace(/\r?\n|\r/g, " ");
+        res.json({ data: text });
+      } else {
+        res.json({ error : "The page requested is not semantically formatted :-(" });
+      }
     }
   );
 

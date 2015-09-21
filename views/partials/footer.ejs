@@ -1,31 +1,15 @@
-  <script src="js/jquery.min.js"></script>
-  <script src="js/underscore-min.js"></script>
-  <script src="js/backbone-min.js"></script>
-  <script src="js/wordify.js"></script>
-  <script>
+<script deferred src="lib/jquery.min.js"></script>
+<script deferred src="lib/underscore-min.js"></script>
+<script deferred src="lib/backbone-min.js"></script>
+<script deferred src="lib/wordify.js"></script>
 
-    "use strict";
+<script deferred src="js/models/Article.js"></script>
 
-    var urlInput = $('input[name="content-url"]');
-    var text = "";
-    var textData;
+<script deferred src="js/collections/ArticleCollection.js"></script>
 
-    $('#url-form').on('submit', function (event) {
+<script deferred src="js/views/AppView.js"></script>
+<script deferred src="js/views/ListView.js"></script>
+<script deferred src="js/views/InputView.js"></script>
+<script deferred src="js/views/WordifyView.js"></script>
 
-      event.stopPropagation();
-      event.preventDefault();
-      
-      $.ajax({
-        url: "/api/",
-        method: 'post',
-        data: {url : urlInput.val()},
-        success: function (result) {
-          text = result.data;
-          textData = wordify.stats(text);
-          console.log(text);
-          console.log(textData);
-        }});
-      
-    });
-  </script>
-  
+<script deferred src="js/app.js"></script>

@@ -1,49 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title><%= title %></title>
-</head>
+<% include ../partials/head %>
 <body>
-  <form id="url-form" action="">
-    <label for="content-url"></label>
-    <input type="url" name="content-url" required>
-    <button type="submit">Get content</button>
-  </form>
-  <article>
-    <div id=""></div>
-  </article>
-  <script src="js/jquery.min.js"></script>
-  <script src="js/underscore-min.js"></script>
-  <script src="js/backbone-min.js"></script>
-  <script src="js/wordify.js"></script>
-  <script>
 
-    "use strict";
+  <div id="container">
+    <div id="app"></div>
+  </div>
 
-    var urlInput = $('input[name="content-url"]');
-    var text = "";
-    var textData;
+  <% include ../partials/footer %>
 
-    $('#url-form').on('submit', function (event) {
-
-      event.stopPropagation();
-      event.preventDefault();
-      
-      $.ajax({
-        url: "/api/",
-        method: 'post',
-        data: {url : urlInput.val()},
-        success: function (result) {
-          text = result.data;
-          textData = wordify.stats(text);
-          console.log(text);
-          console.log(textData);
-        }});
-      
-    });
-
-
-  </script>
 </body>
 </html>
