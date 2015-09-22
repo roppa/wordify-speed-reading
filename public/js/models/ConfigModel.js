@@ -1,4 +1,4 @@
-var PlayerModel = Backbone.Model.extend({
+var ConfigModel = Backbone.Model.extend({
   
   defaults: {
     type: "chunk", //chunk or wave

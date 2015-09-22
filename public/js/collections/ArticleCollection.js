@@ -22,7 +22,7 @@ var ArticleCollection = Backbone.Collection.extend({
           text = result.data;
           meta = wordify.stats(text);
           deferred.resolve("Sorted!");
-          this.add({ text : text, meta : meta });          
+          this.add({ url: url, text : text, meta : meta });
         }
       }.bind(this)});
 

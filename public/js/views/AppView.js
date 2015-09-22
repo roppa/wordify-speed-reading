@@ -14,7 +14,13 @@ var AppView = Backbone.View.extend({
       collection: this.collection
     });
 
-    this.player = new PlayerModel({});
+    this.config = new ConfigView({
+      model: new ConfigModel()
+    });
+
+    this.player = new WordifyView({
+      collection: this.collection
+    });
 
     this.render();
   },
@@ -24,7 +30,9 @@ var AppView = Backbone.View.extend({
     this.$el.append([
       this.title,
       this.input.$el,
-      this.list.$el
+      this.list.$el,
+      this.config.$el,
+      this.player.$el
     ]);
 
     return this;

@@ -1,5 +1,6 @@
 var ListView = Backbone.View.extend({
 
+  tagName: 'ul',
   id: 'list',
 
   initialize: function() {
@@ -12,17 +13,8 @@ var ListView = Backbone.View.extend({
     this.$el.empty();
 
     this.entries = this.collection.models.map(function(model) {
-      //TODO: this should be a list view. just list the articles that have been added
-      return new WordifyView({
-        model: model
-      });
-    });
-
-    var $els = this.entries.map(function(entry) {
-      return entry.$el;
-    });
-
-    this.$el.append($els);
+      this.$el.append($('<li><a href="' + model.get("url") + '" target="_blank">' + model.get("url").substr(0, 20) + '...</a></li>')); 
+    }.bind(this));
 
     return this;
   }

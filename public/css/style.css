@@ -12,3 +12,15 @@ input[type="url"] {
   font-size: 1.5rem;
   margin: 1rem 0.5rem 2rem;
 }
+
+.config {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#list {
+  position: absolute;
+  top: 2rem;
+  right: 1rem;
+}

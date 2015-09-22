@@ -15,6 +15,7 @@ var WordifyView = Backbone.View.extend({
     type: "chunk", //chunk or wave
     chunks: null,
     animate: null,
+    animationElement: null,
     playing: false,
     wordSize: 3,
     wpm: 60000 / 300, //1 second = 1000, 400 wpm = 60000 / 400
@@ -45,11 +46,12 @@ var WordifyView = Backbone.View.extend({
   initialize: function() {
 
     var start = Date.now();
-    var animationElement;
+
+    this.listenTo(this.collection,  'change add remove reset', this.render);
 
     this.render();
 
-    animationElement = this.$('.words');
+    this.player.animationElement = this.$('.words');
 
     this.player.animate = function (timestamp) {
 
@@ -57,7 +59,7 @@ var WordifyView = Backbone.View.extend({
 
       if (now - start > this.player.wpm) {
         start = now;
-        animationElement.html(this.player.chunks[this.player.count]);
+        this.player.animationElement.html(this.player.chunks[this.player.count]);
         this.player.count++;
       }
       
@@ -70,11 +72,19 @@ var WordifyView = Backbone.View.extend({
   },
 
   render: function() {
-    
-    //var chunks = wordify.wave(this.model.get('text'), [10,20,30,40]);
-    this.player.chunks = wordify.chunk(this.model.get('text'), this.player.wordSize);
 
-    this.$el.html(_.template(this.template()));
+    //var chunks = wordify.wave(this.collection.get('text'), [10,20,30,40]);
+ 
+    this.player.chunks = [];
+
+    this.collection.each(function (model) {
+      this.player.chunks = this.player.chunks.concat(wordify.chunk(model.get('text'), this.player.wordSize));
+    }.bind(this));
+
+    if(this.collection.length > 0) {
+      this.$el.html(_.template(this.template()));
+      this.player.animationElement = this.$('.words');
+    }
 
     return this;
 
