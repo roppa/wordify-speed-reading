@@ -1,6 +1,6 @@
 var InputView = Backbone.View.extend({
 
-    el: '<input type="url">',
+    el: '<input type="url" required>',
 
     events: {
       'keydown': 'keyAction',
@@ -19,19 +19,13 @@ var InputView = Backbone.View.extend({
 
       var isEnterKey = (e.which === 13);
 
-      if(!isEnterKey) {
-
-        this.$el.attr({
-          placeholder: 'Sorry, invalid url'
-        });
-
-        this.clearInput();
-
-      } else {
-
-        this.collection.addArticle(this.$el.val());
-        this.resetInput();
-
+      if(isEnterKey) {
+        if (this.$el.val().match(/^(http(s)?:\/\/[a-zA-Z0-9\-_]+\.[a-zA-Z]+(.)+)+/gm)) {
+          this.collection.addArticle(this.$el.val());
+          this.clearInput();
+        } else {
+         this.resetInput();
+        }
       }
 
     },
