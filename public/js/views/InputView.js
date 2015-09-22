@@ -1,6 +1,6 @@
 var InputView = Backbone.View.extend({
 
-    el: '<input type="url" required>',
+    template: _.template('<input type="url" required /><div id="message"></div>'),
 
     events: {
       'keydown': 'keyAction',
@@ -11,6 +11,7 @@ var InputView = Backbone.View.extend({
     },
 
     render: function() {
+      this.$el.html(_.template(this.template()));
       this.resetInput();
       return this;
     },
@@ -18,10 +19,30 @@ var InputView = Backbone.View.extend({
     keyAction: function(e) {
 
       var isEnterKey = (e.which === 13);
+      var ajaxStatus;
+      var message;
 
       if(isEnterKey) {
-        if (this.$el.val().match(/^(http(s)?:\/\/[a-zA-Z0-9\-_]+\.[a-zA-Z]+(.)+)+/gm)) {
-          this.collection.addArticle(this.$el.val());
+
+        if (this.$("input").val().match(/^(http(s)?:\/\/[a-zA-Z0-9\-_]+\.[a-zA-Z]+(.)+)+/gm)) {
+
+          message = this.$("#message");
+          
+          $.when(this.collection.addArticle(this.$("input").val())).then(
+            function(status) { //done
+              message.html(status);
+              window.setTimeout(function () {
+                message.html("");
+              }, 1000);
+            },
+            function(status) { //fail
+              message.html(status);
+            },
+            function(status) { //status
+              message.html(status);
+            }
+          );
+
           this.clearInput();
         } else {
          this.resetInput();
@@ -31,14 +52,14 @@ var InputView = Backbone.View.extend({
     },
 
     resetInput: function() {
-      this.$el.attr({
+      this.$("input").attr({
         placeholder: 'Enter a url'
       });
       this.clearInput();
     },
 
     clearInput: function() {
-      this.$el.val('');
+      this.$("input").val('');
     }
 
 });

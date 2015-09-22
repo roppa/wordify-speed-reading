@@ -14,6 +14,8 @@ var AppView = Backbone.View.extend({
       collection: this.collection
     });
 
+    this.player = new PlayerModel({});
+
     this.render();
   },
 

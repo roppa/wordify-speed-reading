@@ -12,6 +12,7 @@ var ListView = Backbone.View.extend({
     this.$el.empty();
 
     this.entries = this.collection.models.map(function(model) {
+      //TODO: this should be a list view. just list the articles that have been added
       return new WordifyView({
         model: model
       });
