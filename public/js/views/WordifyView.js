@@ -65,6 +65,10 @@ var WordifyView = Backbone.View.extend({
       
       if (this.player.playing) {
         window.requestAnimationFrame(this.player.animate);
+        if (this.player.count >= this.player.chunks.length) {
+          this.player.count = 0;
+          this.pause();
+        }
       }
 
     }.bind(this);
