@@ -15,15 +15,12 @@ var WordifyView = Backbone.View.extend({
     animate: null,
     animationElement: null,
     playing: false,
-    wpm: null, //1 second = 1000, 400 wpm = 60000 / 400
     count: 0
   },
 
   initialize: function() {
 
     var start = Date.now();
-
-    this.player.wpm = 60000 / this.model.get("wpm");
 
     this.listenTo(this.collection,  'change add remove reset', this.render);
     this.listenTo(this.model, "change:wordSize", function () { this.player.count = 0; this.render(); }.bind(this) );
