@@ -9,11 +9,17 @@ var ConfigView = Backbone.View.extend({
     <input id="wpm" type="range" min="50" value="<%= wpm %>" max="800"> \
     </p><p> \
     <label for="wordSize">Length (<%= wordSize %>)</label> \
-    <input id="wordSize" type="range" min="1" value="<%= wordSize %>" max="6"></p></div>'),
+    <input id="wordSize" type="range" min="1" value="<%= wordSize %>" max="6"> \
+    </p><p> \
+    <label for="fontSize">Font size (<%= fontSize %>)</label> \
+    <input id="fontSize" type="range" min="1" value="<%= fontSize %>" max="4.5" step="0.5"> \
+    </p> \
+    </div>'),
 
   events: {
     "change #wpm" : "setWordsPerMinute",
-    "change #wordSize" : "setWordSize"
+    "change #wordSize" : "setWordSize",
+    "change #fontSize" : "setFontSize"
   },
 
   initialize: function () {
@@ -34,6 +40,12 @@ var ConfigView = Backbone.View.extend({
     var wordSize = this.$('#wordSize').val();
     this.model.set("wordSize", wordSize);
     this.$('label[for="wordSize"]').html("Length (" + wordSize + ")");
+  },
+
+  setFontSize: function () {
+    var fontSize = this.$('#fontSize').val();
+    this.model.set("fontSize", fontSize);
+    this.$('label[for="fontSize"]').html("Font size (" + fontSize + ")");
   }
 
 });

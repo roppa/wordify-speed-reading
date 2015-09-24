@@ -8,6 +8,19 @@ input[type="url"] {
   margin-bottom: 1rem;
 }
 
+a {
+  color: #A5DCFF;
+  text-decoration: none;
+}
+
+#app > h1 {
+  margin-top: 4rem;
+  margin-bottom: 3rem;
+  font-size: 3rem;
+  color: rgba(0, 0, 0, 0.32);
+  text-shadow: 7px 7px 20px;
+}
+
 .words {
   font-size: 1.5rem;
   margin: 1rem 0.5rem 2rem;
@@ -26,7 +39,16 @@ input[type="url"] {
 }
 
 .config h2 {
-  text-align: right;
+  position: absolute !important;
+  clip: rect(0, 0, 0, 0);
+}
+
+.config::before {
+  content: "\2699";
+  font-size: 1.3rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
 
 .config div {
@@ -35,6 +57,9 @@ input[type="url"] {
   padding: 1rem;
   box-shadow: -3px 3px 35px -5px #ccc;
   background-color: rgba(255,255,255,0.5);
+  position: absolute;
+  top: 1.2rem;
+  right: 0.8rem;
 }
 
 .config:hover div {

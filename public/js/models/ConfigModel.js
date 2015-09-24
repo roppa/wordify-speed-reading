@@ -5,6 +5,7 @@ var ConfigModel = Backbone.Model.extend({
     wave: [20, 30, 40],
     wordSize: 3,
     wpm: 300, //1 second = 1000, 400 wpm = 60000 / 400
+    fontSize: 1.5 //in rem
   },
 
   initialize: function () {

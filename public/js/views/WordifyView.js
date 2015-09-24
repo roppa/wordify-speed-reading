@@ -24,6 +24,7 @@ var WordifyView = Backbone.View.extend({
 
     this.listenTo(this.collection,  'change add remove reset', this.render);
     this.listenTo(this.model, "change:wordSize", function () { this.player.count = 0; this.render(); }.bind(this) );
+    this.listenTo(this.model, "change:fontSize", this.setFontSize );
 
     this.render();
     this.player.animationElement = this.$('.words');
@@ -32,7 +33,7 @@ var WordifyView = Backbone.View.extend({
 
       var now = Date.now();
 
-      if (now - start > 60000 / this.model.get("wpm")) {
+      if (now - start > 60000 / (this.model.get("wpm") / this.model.get("wordSize")) ) {
         start = now;
         this.player.animationElement.html(this.player.chunks[this.player.count]);
         this.player.count++;
@@ -66,6 +67,10 @@ var WordifyView = Backbone.View.extend({
     cancelAnimationFrame(this.player.animate);
   },
 
+  setFontSize: function () {
+    this.$('.words').css("fontSize", this.model.get("fontSize") + "rem");
+  },
+
   render: function() {
 
     //var chunks = wordify.wave(this.collection.get('text'), [10,20,30,40]);
@@ -81,6 +86,8 @@ var WordifyView = Backbone.View.extend({
       this.$el.html(_.template(this.template()));
       this.player.animationElement = this.$('.words');
     }
+
+    this.setFontSize();
 
     return this;
 
