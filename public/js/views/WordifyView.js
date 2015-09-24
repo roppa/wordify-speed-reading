@@ -26,7 +26,7 @@ var WordifyView = Backbone.View.extend({
     this.player.wpm = 60000 / this.model.get("wpm");
 
     this.listenTo(this.collection,  'change add remove reset', this.render);
-    this.listenTo(this.model, "change:wordSize", this.render);
+    this.listenTo(this.model, "change:wordSize", function () { this.player.count = 0; this.render(); }.bind(this) );
 
     this.render();
     this.player.animationElement = this.$('.words');
