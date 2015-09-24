@@ -2,6 +2,8 @@ var AppView = Backbone.View.extend({
 
   el: "#app",
 
+  configModel: new ConfigModel(),
+
   initialize: function () {
 
     this.title = "<h1>Wordify</h1>";
@@ -15,11 +17,12 @@ var AppView = Backbone.View.extend({
     });
 
     this.config = new ConfigView({
-      model: new ConfigModel()
+      model: this.configModel
     });
 
     this.player = new WordifyView({
-      collection: this.collection
+      collection: this.collection,
+      model: this.configModel
     });
 
     this.render();

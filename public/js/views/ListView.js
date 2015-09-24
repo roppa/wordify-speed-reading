@@ -1,6 +1,7 @@
 var ListView = Backbone.View.extend({
 
   tagName: 'ul',
+
   id: 'list',
 
   initialize: function() {

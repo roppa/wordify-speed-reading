@@ -2,29 +2,55 @@ var WordifyView = Backbone.View.extend({
   
   className: 'wordify',
 
-  template: _.template('<div class="words"></div><div class="player"></div><button class="start">Start</button><button class="stop">Stop</button><p><label for="wpm">300</label><input id="wpm" type="range" min="50" value="300" max="800" /></p>'),
+  template: _.template('<div class="words"></div><div class="player"></div><button class="start">Start</button><button class="stop">Stop</button>'),
 
   events: {
     "click .start" : "play",
-    "click .stop" : "pause",
-    "change #wpm" : "setWordsPerMinute"
+    "click .stop" : "pause"
   },
 
   //move this into a config model with corresponding view. pass that into this view too
   player: {
-    type: "chunk", //chunk or wave
     chunks: null,
     animate: null,
     animationElement: null,
     playing: false,
-    wordSize: 3,
-    wpm: 60000 / 300, //1 second = 1000, 400 wpm = 60000 / 400
+    wpm: null, //1 second = 1000, 400 wpm = 60000 / 400
     count: 0
   },
 
-  setWordsPerMinute: function () {
-    this.player.wpm = 60000 / this.$('#wpm').val();
-    this.$('label[for="wpm"]').html(this.$('#wpm').val());
+  initialize: function() {
+
+    var start = Date.now();
+
+    this.player.wpm = 60000 / this.model.get("wpm");
+
+    this.listenTo(this.collection,  'change add remove reset', this.render);
+    this.listenTo(this.model, "change:wordSize", this.render);
+
+    this.render();
+    this.player.animationElement = this.$('.words');
+
+    this.player.animate = function (timestamp) {
+
+      var now = Date.now();
+
+      if (now - start > 60000 / this.model.get("wpm")) {
+        start = now;
+        this.player.animationElement.html(this.player.chunks[this.player.count]);
+        this.player.count++;
+      }
+      
+      if (this.player.playing) {
+        window.requestAnimationFrame(this.player.animate);
+        if (this.player.count >= this.player.chunks.length) {
+          this.player.count = 0;
+          this.pause();
+        }
+      }
+
+    }.bind(this);
+
   },
 
   play: function () {
@@ -43,46 +69,15 @@ var WordifyView = Backbone.View.extend({
     cancelAnimationFrame(this.player.animate);
   },
 
-  initialize: function() {
-
-    var start = Date.now();
-
-    this.listenTo(this.collection,  'change add remove reset', this.render);
-
-    this.render();
-
-    this.player.animationElement = this.$('.words');
-
-    this.player.animate = function (timestamp) {
-
-      var now = Date.now();
-
-      if (now - start > this.player.wpm) {
-        start = now;
-        this.player.animationElement.html(this.player.chunks[this.player.count]);
-        this.player.count++;
-      }
-      
-      if (this.player.playing) {
-        window.requestAnimationFrame(this.player.animate);
-        if (this.player.count >= this.player.chunks.length) {
-          this.player.count = 0;
-          this.pause();
-        }
-      }
-
-    }.bind(this);
-
-  },
-
   render: function() {
 
     //var chunks = wordify.wave(this.collection.get('text'), [10,20,30,40]);
- 
+    var wordSize = this.model.get("wordSize");
+
     this.player.chunks = [];
 
     this.collection.each(function (model) {
-      this.player.chunks = this.player.chunks.concat(wordify.chunk(model.get('text'), this.player.wordSize));
+      this.player.chunks = this.player.chunks.concat(wordify.chunk(model.get('text'), +wordSize));
     }.bind(this));
 
     if(this.collection.length > 0) {

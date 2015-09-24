@@ -2,28 +2,22 @@ var ConfigModel = Backbone.Model.extend({
   
   defaults: {
     type: "chunk", //chunk or wave
-    chunks: null,
-    animate: null,
-    playing: false,
+    wave: [20, 30, 40],
     wordSize: 3,
-    wpm: 60000 / 300, //1 second = 1000, 400 wpm = 60000 / 400
-    count: 0
+    wpm: 300, //1 second = 1000, 400 wpm = 60000 / 400
   },
 
   initialize: function () {
-    console.log("PlayerModel initialized");
     this.fetch();
     this.on('change', this.save, this);
   },
 
   fetch: function () {
-    console.log("fetched");
-    this.set(JSON.parse(localStorage.getItem(this.id)));
+    this.set(JSON.parse(localStorage.getItem("config")));
   },
 
   save: function () {
-    console.log("saved");
-    localStorage.setItem(this.id, JSON.stringify(this.toJSON()));
+    localStorage.setItem("config", JSON.stringify(this.toJSON()));
   }
 
 });
