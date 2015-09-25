@@ -1,6 +1,6 @@
 var InputView = Backbone.View.extend({
 
-    template: _.template('<input type="url" required /><div id="message"></div>'),
+    template: _.template(app.templates.inputViewTemplate),
 
     events: {
       'keydown': 'keyAction',
