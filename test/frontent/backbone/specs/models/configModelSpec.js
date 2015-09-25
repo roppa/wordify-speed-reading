@@ -26,9 +26,20 @@ describe("Testing the Config model", function () {
 
   it("should set and be saved to local storage", function (done) {
 
+    var localStorageConfig;
+
     config.set("wordSize", 1);
     expect(config.get("wordSize")).to.equal(1);
+
+    config.set("fontSize", 4);
+    expect(config.attributes.fontSize).to.equal(4);
+
+    config.set("wpm", 600);
+    expect(config.attributes.wpm).to.equal(600);
+
     expect(JSON.parse(localStorage.getItem("config")).wordSize).to.equal(1);
+    expect(JSON.parse(localStorage.getItem("config")).fontSize).to.equal(4);
+    expect(JSON.parse(localStorage.getItem("config")).wpm).to.equal(600);
 
     done();
 

@@ -45,7 +45,9 @@
 
       var expect = chai.expect;
 
-      mocha.setup("bdd");
+      mocha.setup({
+        ui: "bdd"
+      });
 
       window.onload = function () {
         mocha.run();
@@ -64,6 +66,7 @@
     <script src="specs/appSpec.js"></script>
     <script src="specs/models/configModelSpec.js"></script>
     <script src="specs/models/articleModelSpec.js"></script>
+    <script src="specs/collections/articleCollectionSpec.js"></script>
 
   </head>
   <body>
