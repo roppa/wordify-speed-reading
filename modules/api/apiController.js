@@ -3,6 +3,10 @@ var jsdom = require('jsdom');
 var redis = require("redis");
 var client = redis.createClient();
 
+client.on("error", function (err) {
+  console.log("Error " + err);
+});
+
 module.exports = {
 
   /**
@@ -14,10 +18,6 @@ module.exports = {
 
     var url = req.body.url;
     var text = "";
-
-    client.on("error", function (err) {
-      console.log("Error " + err);
-    });
 
     client.get(url, function (err, result) {
       if (err) {
@@ -38,12 +38,41 @@ module.exports = {
             client.set(url, text);
             res.json({ data: text });
           } else {
-            res.json({ error : "The page requested is not semantically formatted :-(" });
+            text = window.document.body.textContent.replace(/\r?\n|\r/g, " ");
+            client.set(url, text);
+            res.json({ error : "The page requested was not semantically formatted. ", data: text });
           }
         }); //jsdom.env
 
       } else {
         res.json({ data: result });
+      }
+
+    });
+
+  },
+
+  /**
+   * / - PUT
+   * @param  {string} url string.
+   * @param  {string} text string.
+   * @return {object} JSON object. If successful the data attribute will contain the article content. If an error occurs, then an error attribute will contain the error message.
+   */
+  put: function (req, res) {
+
+    var url = req.body.url;
+    var text = req.body.text;
+
+    if (!url || !text) {
+      res.json({ error : "Either url or text were invalid." });
+    }
+
+    client.set(url, text, function (err, result) {
+
+      if (err) {
+        res.json({ error : "Error: " + err.message });
+      } else {
+        res.sendStatus(200);
       }
 
     });
