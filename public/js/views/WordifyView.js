@@ -2,7 +2,7 @@ var WordifyView = Backbone.View.extend({
   
   className: 'wordify',
 
-  template: _.template('<div class="words"></div><div class="player"></div><button class="start">Start</button><button class="stop">Stop</button>'),
+  template: _.template(app.templates.wordifyTemplate),
 
   events: {
     "click .start" : "play",
@@ -22,7 +22,7 @@ var WordifyView = Backbone.View.extend({
 
     var start = Date.now();
 
-    this.listenTo(this.collection,  'change add remove reset', this.render);
+    this.listenTo(this.collection, 'change add remove reset', this.render);
     this.listenTo(this.model, "change:wordSize", function () { this.player.count = 0; this.render(); }.bind(this) );
     this.listenTo(this.model, "change:fontSize", this.setFontSize );
 
