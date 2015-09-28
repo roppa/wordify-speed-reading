@@ -6,8 +6,6 @@ var AppView = Backbone.View.extend({
 
   initialize: function () {
 
-    this.title = "<h1>Wordify</h1>";
-
     this.input = new InputView({
       collection: this.collection
     });
@@ -31,7 +29,6 @@ var AppView = Backbone.View.extend({
   render: function () {
 
     this.$el.append([
-      this.title,
       this.input.$el,
       this.list.$el,
       this.config.$el,

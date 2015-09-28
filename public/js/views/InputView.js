@@ -30,7 +30,12 @@ var InputView = Backbone.View.extend({
           
           $.when(this.collection.addArticle(this.$("input").val())).then(
             function(status) { //done
-              message.html(status);
+              if (status.error) {
+                //display copy with input form
+                //add a handler for PUT
+              } else {              
+                message.html(status);
+              }
               window.setTimeout(function () {
                 message.html("");
               }, 1000);
