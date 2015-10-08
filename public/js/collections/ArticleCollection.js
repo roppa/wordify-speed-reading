@@ -28,6 +28,10 @@ var ArticleCollection = Backbone.Collection.extend({
 
     return deferred.promise();
 
+  },
+
+  addText: function (text) {
+    this.add({ url: "Localhost", text: text, meta: wordify.stats(text) });
   }
 
 });

@@ -6,7 +6,6 @@ var ListView = Backbone.View.extend({
 
   initialize: function() {
     this.listenTo(this.collection, 'add', this.render);
-    //this.collection.on('add', this.render, this);
   },
 
   render: function() {

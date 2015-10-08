@@ -73,7 +73,6 @@ var WordifyView = Backbone.View.extend({
 
   render: function() {
 
-    //var chunks = wordify.wave(this.collection.get('text'), [10,20,30,40]);
     var wordSize = this.model.get("wordSize");
 
     this.player.chunks = [];

@@ -7,9 +7,18 @@ app.templates.wordifyTemplate = '<div class="words"></div>\
   <button class="start">Start</button>\
   <button class="stop">Stop</button>';
 
-app.templates.inputViewTemplate = '<input type="url" required /> \
+app.templates.inputViewTemplate = '\
   <div id="message"></div>\
-  <textarea name="copy" id="copy" placeholder="Paste text"></textarea>';
+  <div class="formrow">\
+    <label for="url">Url</label>\
+    <input type="url" id="url" required />\
+  </div>\
+  <p>Or</p>\
+  <div class="formrow">\
+    <label for="copy">Text</label>\
+    <textarea name="copy" id="copy" placeholder="Paste text"></textarea>\
+  </div>\
+  <div class="formrow"><button>Add text</button></div>';
 
 app.templates.configTemplate = '<h2>Config</h2> \
   <div class="settings"> \

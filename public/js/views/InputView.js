@@ -3,36 +3,43 @@ var InputView = Backbone.View.extend({
     template: _.template(app.templates.inputViewTemplate),
 
     events: {
-      'keydown': 'keyAction',
+      'keydown input[type=url]': 'submitUrl',
+      'click button': 'submitText',
     },
 
-    initialize: function() {
+    initialize: function () {
       this.render();
     },
 
-    render: function() {
+    render: function () {
       this.$el.html(_.template(this.template()));
       this.resetInput();
+      $(this.$el).show();
       return this;
     },
 
-    keyAction: function(e) {
+    toggle: function () {
+      $(this.$el).hide();
+    },
+
+    submitUrl: function (e) {
 
       var isEnterKey = (e.which === 13);
       var ajaxStatus;
       var message;
+      var that = this;
 
-      if(isEnterKey) {
+      if (isEnterKey) {
 
         if (this.$("input").val().match(/^(http(s)?:\/\/[a-zA-Z0-9\-_]+\.[a-zA-Z]+(.)+)+/gm)) {
 
           message = this.$("#message");
           
           $.when(this.collection.addArticle(this.$("input").val())).then(
-            function(status) { //done
+            function (status) { //done
               if (status.error) {
-                //display copy with input form
-                //add a handler for PUT
+                that.$("textarea").val(message.text);
+                this.toggle();
               } else {              
                 message.html(status);
               }
@@ -40,10 +47,10 @@ var InputView = Backbone.View.extend({
                 message.html("");
               }, 1000);
             },
-            function(status) { //fail
+            function (status) { //fail
               message.html(status);
             },
-            function(status) { //status
+            function (status) { //status
               message.html(status);
             }
           );
@@ -56,14 +63,32 @@ var InputView = Backbone.View.extend({
 
     },
 
-    resetInput: function() {
+    submitText: function () {
+      
+      var message;
+      var text = this.$("textarea").val();
+
+      if (text) {
+        this.collection.addText(text);
+        this.toggle();
+      } else {
+        message = this.$("#message");
+        message.html("You need to paste some text");
+        window.setTimeout(function () {
+          message.html("");
+        }, 1000);
+      }
+
+    },
+
+    resetInput: function () {
       this.$("input").attr({
         placeholder: 'Enter a url'
       });
       this.clearInput();
     },
 
-    clearInput: function() {
+    clearInput: function () {
       this.$("input").val('');
     }
 
