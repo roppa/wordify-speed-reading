@@ -19,7 +19,7 @@ var InputView = Backbone.View.extend({
     },
 
     toggle: function () {
-      $(this.$el).hide();
+      $(this.$el).toggle();
     },
 
     submitUrl: function (e) {

@@ -13,7 +13,7 @@ var ListView = Backbone.View.extend({
     this.$el.empty();
 
     this.entries = this.collection.models.map(function(model) {
-      this.$el.append($('<li><a href="' + model.get("url") + '" target="_blank">' + model.get("url").substr(0, 20) + '...</a></li>')); 
+      this.$el.append($('<li>' + model.get("url").substr(0, 20) + '</li>')); 
     }.bind(this));
 
     return this;
