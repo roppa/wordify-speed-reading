@@ -39,9 +39,9 @@ var InputView = Backbone.View.extend({
             function (status) { //done
               if (status.error) {
                 that.$("textarea").val(message.text);
-                this.toggle();
-              } else {              
+              } else {
                 message.html(status);
+                that.toggle();
               }
               window.setTimeout(function () {
                 message.html("");
