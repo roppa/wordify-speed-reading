@@ -57,6 +57,7 @@ p {
   position: absolute;
   top: 2rem;
   right: 1rem;
+  text-align: left;
 }
 
 .config {

@@ -22,6 +22,10 @@ var WordifyView = Backbone.View.extend({
 
     var start = Date.now();
 
+    Backbone.pubSub.on('add', function () {
+      this.$el.hide();
+    }.bind(this), this);
+
     this.listenTo(this.collection, 'change add remove reset', this.render);
     this.listenTo(this.model, "change:wordSize", function () { this.player.count = 0; this.render(); }.bind(this) );
     this.listenTo(this.model, "change:fontSize", this.setFontSize );
@@ -74,6 +78,8 @@ var WordifyView = Backbone.View.extend({
   render: function() {
 
     var wordSize = this.model.get("wordSize");
+
+    this.$el.show();
 
     this.player.chunks = [];
 
