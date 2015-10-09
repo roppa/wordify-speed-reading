@@ -8,6 +8,7 @@ var InputView = Backbone.View.extend({
     },
 
     initialize: function () {
+      Backbone.pubSub.on('add', this.show, this);
       this.render();
     },
 
@@ -18,8 +19,12 @@ var InputView = Backbone.View.extend({
       return this;
     },
 
-    toggle: function () {
-      $(this.$el).toggle();
+    hide: function () {
+      $(this.$el).hide();
+    },
+
+    show: function () {
+      $(this.$el).show();
     },
 
     submitUrl: function (e) {
@@ -41,7 +46,7 @@ var InputView = Backbone.View.extend({
                 that.$("textarea").val(message.text);
               } else {
                 message.html(status);
-                that.toggle();
+                that.hide();
               }
               window.setTimeout(function () {
                 message.html("");
@@ -70,7 +75,8 @@ var InputView = Backbone.View.extend({
 
       if (text) {
         this.collection.addText(text);
-        this.toggle();
+        this.$("textarea").val("");
+        this.hide();
       } else {
         message = this.$("#message");
         message.html("You need to paste some text");

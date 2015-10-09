@@ -20,6 +20,8 @@ app.templates.inputViewTemplate = '\
   </div>\
   <div class="formrow"><button>Add text</button></div>';
 
+app.templates.listViewTemplate = '<ul></ul>';
+
 app.templates.configTemplate = '<h2>Config</h2> \
   <div class="settings"> \
   <p> \
