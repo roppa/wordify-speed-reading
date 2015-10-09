@@ -1,9 +1,14 @@
 var http = require('http');
 var jsdom = require('jsdom');
-var redis = require("redis");
-var client = redis.createClient();
+var redis;
 
-client.on("error", function (err) {
+if (process.env.REDISCLOUD_URL) {
+  redis = require('redis').redis.createClient(process.env.REDISCLOUD_URL, {no_ready_check: true});
+} else {
+  redis = require("redis").createClient();
+}
+
+redis.on("error", function (err) {
   console.log("Error " + err);
 });
 
@@ -19,7 +24,7 @@ module.exports = {
     var url = req.body.url;
     var text = "";
 
-    client.get(url, function (err, result) {
+    redis.get(url, function (err, result) {
       if (err) {
         res.json({ error : err });
       }
@@ -35,11 +40,11 @@ module.exports = {
           //lets start using schema.org
           if (page) {
             text = page.textContent.replace(/\r?\n|\r/g, " ");
-            client.set(url, text);
+            redis.set(url, text);
             res.json({ data: text });
           } else {
             text = window.document.body.textContent.replace(/\r?\n|\r/g, " ");
-            client.set(url, text);
+            redis.set(url, text);
             res.json({ error : "The page requested was not semantically formatted. ", data: text });
           }
         }); //jsdom.env
@@ -67,7 +72,7 @@ module.exports = {
       res.json({ error : "Either url or text were invalid." });
     }
 
-    client.set(url, text, function (err, result) {
+    redis.set(url, text, function (err, result) {
 
       if (err) {
         res.json({ error : "Error: " + err.message });
