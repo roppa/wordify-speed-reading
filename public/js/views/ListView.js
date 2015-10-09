@@ -25,7 +25,7 @@ var ListView = Backbone.View.extend({
     }.bind(this));
 
     if (this.collection.length > 0) {
-      this.$el.append('<button class="add">Add</button>');
+      this.$el.append('<button class="add">+</button>');
     }
 
     return this;

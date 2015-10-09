@@ -60,6 +60,21 @@ p {
   text-align: left;
 }
 
+#list button {
+  border-radius: 2rem;
+  padding: 0.5rem;
+  margin: 0;
+  line-height: 0.8rem;
+  background-color: #E1FFFF;
+  font-size: 1.1rem;
+  font-weight: bold;
+  float: right;
+}
+
+#list button:focus {
+  outline: none;
+}
+
 .config {
   position: absolute;
   top: 0;
