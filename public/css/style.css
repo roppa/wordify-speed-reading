@@ -88,10 +88,11 @@ p {
 
 .config::before {
   content: "\2699";
-  font-size: 1.3rem;
+  font-size: 2.2rem;
   position: absolute;
   top: 1rem;
   right: 1rem;
+  color: rgba(0, 0, 0, 0.42);
 }
 
 .config div {
