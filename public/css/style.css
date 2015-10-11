@@ -49,9 +49,11 @@ p {
   text-shadow: 7px 7px 20px;
 }
 
-#app > h1.playing {
-  transition: color 0.5s ease;
-  color: rgba(0, 0, 0, 0.1);
+
+#app > h2 {
+  position: relative;
+  top: -4rem;
+  color: rgba(0,0,0,0.2);
 }
 
 .words {
