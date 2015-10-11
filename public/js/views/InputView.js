@@ -21,10 +21,12 @@ var InputView = Backbone.View.extend({
 
     hide: function () {
       $(this.$el).hide();
+      $("#app > h1").addClass("playing");
     },
 
     show: function () {
       $(this.$el).show();
+      $("#app > h1").removeClass("playing");
     },
 
     submitUrl: function (e) {

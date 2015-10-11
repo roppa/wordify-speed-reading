@@ -44,8 +44,14 @@ p {
   margin-top: 2rem;
   margin-bottom: 3rem;
   font-size: 7rem;
+  transition: color 0.5s ease;
   color: rgba(0, 0, 0, 0.32);
   text-shadow: 7px 7px 20px;
+}
+
+#app > h1.playing {
+  transition: color 0.5s ease;
+  color: rgba(0, 0, 0, 0.1);
 }
 
 .words {
