@@ -21,7 +21,7 @@ var ListView = Backbone.View.extend({
     this.$el.html(_.template(this.template()));
 
     this.entries = this.collection.models.map(function(model) {
-      this.$("ul").append($('<li>' + model.get("url").substr(0, 20) + '</li>')); 
+      this.$("ul").append($('<li>test' + model.get("url").substring(0, 20) + '...</li>')); 
     }.bind(this));
 
     if (this.collection.length > 0) {

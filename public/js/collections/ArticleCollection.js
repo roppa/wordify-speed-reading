@@ -31,7 +31,7 @@ var ArticleCollection = Backbone.Collection.extend({
   },
 
   addText: function (text) {
-    this.add({ url: text.substr(0, 10) + "...", text: text, meta: wordify.stats(text) });
+    this.add({ url: text.substr(0, 10), text: text, meta: wordify.stats(text) });
   }
 
 });
