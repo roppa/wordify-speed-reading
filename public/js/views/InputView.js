@@ -44,20 +44,18 @@ var InputView = Backbone.View.extend({
           
           $.when(this.collection.addArticle(this.$("input").val())).then(
             function (status) { //done
-              console.log(status)
-              if (status.error) {
-                that.$("#copy").val(message.text);
-              } else {
-                message.html(status);
-                that.hide();
-              }
+              message.html(status);
+              that.hide();
               window.setTimeout(function () {
                 message.html("");
               }, 1000);
             },
             function (status) { //fail
-              console.log(status, "fail")
-              message.html(status);
+              message.html(status.error + " Edit text below.");
+              that.$("#copy").val(status.data);
+              window.setTimeout(function () {
+                message.html("");
+              }, 1000);
             },
             function (status) { //status
               message.html(status);

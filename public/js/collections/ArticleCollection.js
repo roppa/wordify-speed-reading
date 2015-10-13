@@ -17,7 +17,7 @@ var ArticleCollection = Backbone.Collection.extend({
       data: { url : url },
       success: function (result) {
         if (result.error) {
-          deferred.reject(result.error);
+          deferred.reject(result);
         } else {
           text = result.data;
           meta = wordify.stats(text);

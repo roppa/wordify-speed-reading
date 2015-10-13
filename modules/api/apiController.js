@@ -44,7 +44,6 @@ module.exports = {
             res.json({ data: text });
           } else {
             text = window.document.body.textContent.replace(/\r?\n|\r/g, " ");
-            redis.set(url, text);
             res.json({ error : "The page requested was not semantically formatted. ", data: text });
           }
         }); //jsdom.env
