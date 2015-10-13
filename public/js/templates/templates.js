@@ -4,8 +4,8 @@ app.templates = {};
 
 app.templates.wordifyTemplate = '<div class="words"></div>\
   <div class="player"></div>\
-  <button class="start">Start</button>\
-  <button class="stop">Stop</button>';
+  <button class="start">&#9654;</button>\
+  <button class="stop current">&#9612;&#9612;</button>';
 
 app.templates.inputViewTemplate = '\
   <div id="message"></div>\
@@ -19,6 +19,14 @@ app.templates.inputViewTemplate = '\
     <textarea name="copy" id="copy" placeholder="Paste text"></textarea>\
   </div>\
   <div class="formrow"><button>Add text</button></div>';
+
+app.templates.editViewTemplate = '\
+  <div id="message"></div>\
+  <div class="formrow">\
+    <label for="copy">Text</label>\
+    <textarea name="copy" id="copy" placeholder="Paste text"></textarea>\
+  </div>\
+  <div class="formrow"><button>Update text</button></div>';
 
 app.templates.listViewTemplate = '<ul></ul>';
 

@@ -44,8 +44,9 @@ var InputView = Backbone.View.extend({
           
           $.when(this.collection.addArticle(this.$("input").val())).then(
             function (status) { //done
+              console.log(status)
               if (status.error) {
-                that.$("textarea").val(message.text);
+                that.$("#copy").val(message.text);
               } else {
                 message.html(status);
                 that.hide();
@@ -55,6 +56,7 @@ var InputView = Backbone.View.extend({
               }, 1000);
             },
             function (status) { //fail
+              console.log(status, "fail")
               message.html(status);
             },
             function (status) { //status
