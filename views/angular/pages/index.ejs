@@ -1,10 +1,49 @@
 <% include ../../partials/head %>
-<body>
+<body ng-app="wordifyApp">
 
   <div id="container">
     <div id="app">  
       <h1>Wordify</h1>
       <h2>Speed reading</h2>
+
+      <div id="message"></div>
+
+      <div class="formrow">
+        <label for="url">Url</label>
+        <input type="url" id="url" required placeholder="Enter a url" />
+      </div>
+      <p>Or</p>
+      <div class="formrow">
+        <label for="copy">Text</label>
+        <textarea name="copy" id="copy" placeholder="Paste text"></textarea>
+      </div>
+      <div class="formrow"><button>Add text</button></div>
+
+      <div class="wordify">
+        <div class="words"></div>
+        <div class="player"></div>
+        <button class="start">&#9654;</button>
+        <button class="stop current">&#9612;&#9612;</button>
+      </div>
+
+      <div class="config">
+        <h2>Config</h2>
+        <div class="settings">
+          <p>
+            <label for="wpm">{{ wpm }}<abbr title="Words per minute">wpm</abbr></label>
+            <input id="wpm" type="range" min="50" value="{{ wpm }}" max="800">
+          </p>
+          <p>
+            <label for="wordSize">Length ({{ wordSize }})</label>
+            <input id="wordSize" type="range" min="1" value="{{ wordSize }}" max="6">
+          </p>
+          <p>
+            <label for="fontSize">Font size ({{ fontSize }})</label>
+            <input id="fontSize" type="range" min="1" value="{{ fontSize }}" max="4.5" step="0.5">
+          </p>
+        </div>
+      </div>
+
     </div>
   </div>
 
