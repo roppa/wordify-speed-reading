@@ -26,5 +26,10 @@
     "supertest": "^1.1.0",
     "wordify": "0.0.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "jasmine-core": "^2.3.4",
+    "jasmine-reporters": "^2.0.7",
+    "jasmine-spec-reporter": "^2.4.0",
+    "protractor": "^2.5.1"
+  }
 }
