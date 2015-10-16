@@ -5,7 +5,7 @@ describe('Wordify Angular App', function() {
   });
 
   it('user can navigate to the angular app', function(){
-      expect( browser.driver.getCurrentUrl() ).toContain('angular');
+    expect( browser.driver.getCurrentUrl() ).toContain('angular');
   });
 
 });
