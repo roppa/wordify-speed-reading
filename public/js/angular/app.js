@@ -33,7 +33,7 @@ angular.module("wordify.controllers", [])
 
   })
 
-  .controller("ArticleTextController", function ($scope, Articles) {
+  .controller("ArticleTextController", function ($scope, Articles, Player) {
 
     $scope.article = {
       text: ""
@@ -44,6 +44,7 @@ angular.module("wordify.controllers", [])
         Articles.articles.push({ url: $scope.article.text.substring(0, 10) + "...", text : $scope.article.text });
         $scope.article.text = "";
         $scope.config.editMode = false;
+        Player.generateWords();
       }
     };
 
@@ -53,6 +54,9 @@ angular.module("wordify.controllers", [])
 
     $scope.remove = function (index) {
       $scope.articles.splice(index, 1);
+      if ($scope.articles.length <= 0) {
+        $scope.config.editMode = true;
+      }
     };
 
     $scope.add = function () {
@@ -116,7 +120,6 @@ angular.module("Player", ["Articles", "Config"])
 
       if (now - start > 60000 / (+Config.wpm / +Config.wordSize )) {
         player.words = player.chunks[player.count];
-        console.log(player.words);
         $rootScope.$apply();
         player.count++;
         start = now;
@@ -157,7 +160,6 @@ angular.module("Player", ["Articles", "Config"])
     };
 
     player.setFontSize();
-    player.generateWords();
 
     return player;
 
