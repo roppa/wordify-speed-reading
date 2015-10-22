@@ -1,40 +1,163 @@
 "use strict";
 
-var app = angular.module("wordifyApp", []);
+///////////////////////////////////////////////////////////
+// App
+///////////////////////////////////////////////////////////
 
-app.run(function($rootScope) {
+var app = angular.module("wordifyApp", ["wordify.controllers", "Articles", "Config", "Player"]);
 
-  var config = $rootScope.config = {};
-  var articles = $rootScope.articles = [];
-
-  config.wpm = 300;
-  config.wordSize = 1;
-  config.fontSize = 2.5;
-
+app.run(function ($rootScope, Config, Articles) {
+  $rootScope.articles = Articles.articles;
+  $rootScope.config = Config;
 });
 
-app.controller("ConfigController", function ($scope) {
-  
-});
+///////////////////////////////////////////////////////////
+// Controllers
+///////////////////////////////////////////////////////////
 
-app.controller("ArticleUrlController", function ($scope) {
+angular.module("wordify.controllers", [])
 
-});
+  .controller("ArticleUrlController", ['$scope', function ($scope) {
 
-app.controller("ArticleTextController", function ($scope) {
+    $scope.article = {
+      url: ""
+    };
 
-  $scope.textArticle = "";
+    $scope.submitUrl = function () {
 
-  $scope.submitText = function () {
-    $scope.articles.push({ url: "test", text : $scope.textArticle });
-  }
+    };
 
-});
+  }])
 
-app.controller("ListController", function ($scope) {
+  .controller("InputController", function ($scope) {
 
-});
+  })
 
-app.controller("PlayerController", function ($scope) {
-  
-});
+  .controller("ArticleTextController", function ($scope, Articles) {
+
+    $scope.article = {
+      text: ""
+    };
+
+    $scope.submitText = function (e) {
+      if ($scope.article.text !== "") {
+        Articles.articles.push({ url: $scope.article.text.substring(0, 10) + "...", text : $scope.article.text });
+        $scope.article.text = "";
+        $scope.config.editMode = false;
+      }
+    };
+
+  })
+
+  .controller("ListController", function ($scope) {
+
+    $scope.remove = function (index) {
+      $scope.articles.splice(index, 1);
+    };
+
+    $scope.add = function () {
+      $scope.config.editMode = true;
+    };
+
+  })
+
+  .controller("PlayerController", function ($scope, Player) {
+
+    $scope.player = Player;
+
+    $scope.$watch(function () {
+      return $scope.player.fontSize; 
+    }, function (newValue, oldValue) {
+      if (newValue !== oldValue) {
+        $scope.player.setFontSize(newValue);
+      }
+    });
+
+  })
+
+  .controller("ConfigController", function ($scope) {
+
+  });
+
+///////////////////////////////////////////////////////////
+// Services
+///////////////////////////////////////////////////////////
+
+angular.module('Articles', [])
+  .factory('Articles', function () {
+    return { "articles" : [{ text : "this is a test", url: "test test"}] };
+  });
+
+angular.module('Config', [])
+  .factory('Config', function () {
+    return {
+      wpm: 300,
+      wordSize: 1,
+      fontSize: 2.5,
+      editMode: true
+    }
+  });
+
+angular.module("Player", ["Articles", "Config"])
+  .factory("Player", function (Articles, Config, $window) {
+
+    var start = Date.now();
+    var player = {};
+
+    player.chunks = ["this", "is", "a", "test", "thing", "test", "test", "test", "this", "is", "a", "test", "thing", "test", "test", "test"];
+
+    player.playing = false;
+    player.count = 0;
+    player.words = "";
+
+    player.animate = function (timestamp) {
+
+      var now = Date.now();
+
+      if (now - start > 60000 / (+Config.wpm / +Config.wordSize )) {
+        player.words = player.chunks[player.count];
+        console.log(player.words);
+        player.count++;
+        start = now;
+      }
+      
+      if (player.playing) {
+        $window.requestAnimationFrame(player.animate);
+        if (player.count >= player.chunks.length) {
+          player.count = 0;
+          player.stop();
+        }
+      }
+
+    };
+
+    player.start = function () {
+      if (!player.playing) {
+        player.playing = true;
+        $window.requestAnimationFrame(player.animate);
+      }
+    };
+
+    player.stop = function () {
+      if (player.playing) {
+        player.playing = false;
+        $window.cancelAnimationFrame(player.animate);
+      }
+    };
+
+    player.generateWords = function () {
+      angular.forEach(Articles.articles, function (article, key) {
+        player.chunks = player.chunks.concat(wordify.chunk(article.text, +Config.wordSize));
+      });
+    };
+
+    player.setFontSize = function () {
+      player.fontSize = Config.fontSize + 'rem';
+    };
+
+    player.setFontSize();
+    player.generateWords();
+
+    return player;
+
+  });

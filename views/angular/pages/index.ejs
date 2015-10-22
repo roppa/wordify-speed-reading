@@ -7,55 +7,69 @@
       <h2>Speed reading</h2>
 
       <div id="list" ng-controller="ListController" ng-show="articles.length">
-        <ul><li ng-repeat="article in articles">{{ article.url }}</li></ul>
-        <button class="add">+</button>
+        <div ng-include="'list.html'"></div>
       </div>
 
-      <div class="inputForm" ng-hide="default">
-        <div id="message"></div>
-        <div class="formrow" ng-controller="ArticleUrlController">
-          <label for="url">Url</label>
-          <input type="url" id="url" ng-pattern="/^(http(s)?:\/\/[a-zA-Z0-9\-_]+\.[a-zA-Z]+(.)+)+/gm" required placeholder="Enter a url" />
-        </div>
-        <p>Or</p>
-        <div ng-controller="ArticleTextController">
-          <div class="formrow">
-            <label for="copy">Text</label>
-            <textarea name="copy" ng-model="textArticle" id="copy" placeholder="Paste text"></textarea>
-          </div>
-          <div class="formrow"><button ng-click="submitText()">Add text</button></div>
-        </div>
-      </div>
+      <div class="inputForm" ng-include="'form.html'" ng-controller="InputController" ng-show="config.editMode"></div>
 
-      <div class="wordify" ng-controller="PlayerController" ng-show="default">
-        <div class="words"></div>
-        <div class="player"></div>
-        <button class="start">&#9654;</button>
-        <button class="stop current">&#9612;&#9612;</button>
-      </div>
+      <div class="wordify" ng-controller="PlayerController" ng-hide="config.editMode" ng-include="'player.html'"></div>
 
-      <div class="config" ng-controller="ConfigController">
-        <h2>Config</h2>
-        <div class="settings">
-          <p>
-            <label for="wpm">{{ config.wpm }}<abbr title="Words per minute">wpm</abbr></label>
-            <input id="wpm" type="range" min="50" ng-model="config.wpm" value="{{ wpm }}" max="800">
-          </p>
-          <p>
-            <label for="wordSize">Length ({{ config.wordSize }})</label>
-            <input id="wordSize" type="range" min="1" ng-model="config.wordSize" value="{{ wordSize }}" max="6">
-          </p>
-          <p>
-            <label for="fontSize">Font size ({{ config.fontSize }})</label>
-            <input id="fontSize" type="range" min="1" ng-model="config.fontSize" value="{{ fontSize }}" max="4.5" step="0.5">
-          </p>
-        </div>
-      </div>
+      <div class="config" ng-include="'config.html'" ng-controller="ConfigController"></div>
 
     </div>
   </div>
 
+  <script type="text/ng-template" id="list.html">
+    <ul>
+      <li ng-repeat="article in articles track by $index" ng-click="remove($index)">{{ article.url }}</li>
+    </ul>
+    <button class="add" ng-click="add()">+</button>
+  </script>
+
+  <script type="text/ng-template" id="form.html">
+    <div id="message"></div>
+    <div class="formrow" ng-controller="ArticleUrlController">
+      <label for="url">Url</label>
+      <input type="url" id="url" ng-model="article.url" required placeholder="Enter a url" />
+    </div>
+    <p>Or</p>
+    <div ng-controller="ArticleTextController">
+      <div class="formrow">
+        <label for="copy">Text</label>
+        <textarea name="copy" ng-model="article.text" id="copy" placeholder="Paste text"></textarea>
+      </div>
+      <div class="formrow"><button ng-click="submitText()">Add text</button></div>
+    </div>
+  </script>
+
+  <script type="text/ng-template" id="player.html">
+    <div class="words" ng-style="{'font-size': player.fontSize }">{{player.data.words}}</div>
+    <div class="player"></div>
+    <button class="start" ng-click="player.start()">&#9654;</button>
+    <button class="stop current" ng-click="player.stop()">&#9612;&#9612;</button>
+  </script>
+
+  <script type="text/ng-template" id="config.html">
+    <h2>Config</h2>
+    <div class="settings">
+      <p>
+        <label for="wpm">{{ config.wpm }}<abbr title="Words per minute">wpm</abbr></label>
+        <input id="wpm" type="range" min="50" ng-model="config.wpm" value="{{ wpm }}" max="800">
+      </p>
+      <p>
+        <label for="wordSize">Length ({{ config.wordSize }})</label>
+        <input id="wordSize" type="range" min="1" ng-model="config.wordSize" value="{{ wordSize }}" max="6">
+      </p>
+      <p>
+        <label for="fontSize">Font size ({{ config.fontSize }})</label>
+        <input id="fontSize" type="range" min="1" ng-model="config.fontSize" value="{{ fontSize }}" max="4.5" step="0.5">
+      </p>
+    </div>
+  </script>
+
   <% include ../partials/footer %>
+
+  <% include ../../partials/analytics %>
 
 </body>
 </html>

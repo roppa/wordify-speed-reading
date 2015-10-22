@@ -68,7 +68,7 @@ var WordifyView = Backbone.View.extend({
       return;
     }
     this.player.playing = false;
-    cancelAnimationFrame(this.player.animate);
+    window.cancelAnimationFrame(this.player.animate);
   },
 
   setFontSize: function () {
