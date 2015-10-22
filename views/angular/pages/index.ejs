@@ -43,7 +43,7 @@
   </script>
 
   <script type="text/ng-template" id="player.html">
-    <div class="words" ng-style="{'font-size': player.fontSize }">{{player.data.words}}</div>
+    <div class="words" ng-style="{'font-size': player.fontSize }">{{ player.words }}</div>
     <div class="player"></div>
     <button class="start" ng-click="player.start()">&#9654;</button>
     <button class="stop current" ng-click="player.stop()">&#9612;&#9612;</button>

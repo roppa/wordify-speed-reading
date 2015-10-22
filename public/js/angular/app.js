@@ -85,7 +85,7 @@ angular.module("wordify.controllers", [])
 
 angular.module('Articles', [])
   .factory('Articles', function () {
-    return { "articles" : [{ text : "this is a test", url: "test test"}] };
+    return { "articles" : [] };
   });
 
 angular.module('Config', [])
@@ -99,12 +99,12 @@ angular.module('Config', [])
   });
 
 angular.module("Player", ["Articles", "Config"])
-  .factory("Player", function (Articles, Config, $window) {
+  .factory("Player", function (Articles, Config, $window, $rootScope) {
 
     var start = Date.now();
     var player = {};
 
-    player.chunks = ["this", "is", "a", "test", "thing", "test", "test", "test", "this", "is", "a", "test", "thing", "test", "test", "test"];
+    player.chunks = [];
 
     player.playing = false;
     player.count = 0;
@@ -117,6 +117,7 @@ angular.module("Player", ["Articles", "Config"])
       if (now - start > 60000 / (+Config.wpm / +Config.wordSize )) {
         player.words = player.chunks[player.count];
         console.log(player.words);
+        $rootScope.$apply();
         player.count++;
         start = now;
       }
