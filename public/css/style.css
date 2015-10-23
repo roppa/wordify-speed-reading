@@ -130,3 +130,26 @@ p {
 .config:hover div {
   display: block;
 }
+
+footer {
+  text-align: left;
+  position: absolute;
+  bottom: 1vh;
+  width: 100%;
+}
+
+footer small {
+  display: block;
+  margin-left: 1rem;
+}
+
+footer nav ul {
+  float: right;
+  list-style-type: none;
+  margin: 0;
+}
+
+footer small, footer nav ul li {
+  float: left;
+  margin-right: 2rem;
+}

@@ -19,6 +19,8 @@
     </div>
   </div>
 
+  <% include ../../partials/footer %>
+
   <script type="text/ng-template" id="list.html">
     <ul>
       <li ng-repeat="article in articles track by $index" ng-click="remove($index)">{{ article.url }}</li>
