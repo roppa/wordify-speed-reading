@@ -65,12 +65,13 @@ angular.module("wordify.controllers", [])
 
   })
 
-  .controller("PlayerController", function ($scope, Player) {
+  .controller("PlayerController", function ($rootScope, $scope, Player) {
 
     $scope.player = Player;
+    $scope.player.setFontSize($rootScope.config.fontSize);
 
     $scope.$watch(function () {
-      return $scope.player.fontSize; 
+      return $rootScope.config.fontSize; 
     }, function (newValue, oldValue) {
       if (newValue !== oldValue) {
         $scope.player.setFontSize(newValue);
@@ -114,6 +115,7 @@ angular.module("Player", ["Articles", "Config"])
     player.count = 0;
     player.words = "";
 
+
     player.animate = function (timestamp) {
 
       var now = Date.now();
@@ -155,11 +157,9 @@ angular.module("Player", ["Articles", "Config"])
       });
     };
 
-    player.setFontSize = function () {
-      player.fontSize = Config.fontSize + 'rem';
+    player.setFontSize = function (size) {
+      player.fontSize = size + 'rem';
     };
-
-    player.setFontSize();
 
     return player;
 
