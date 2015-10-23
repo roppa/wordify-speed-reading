@@ -103,11 +103,11 @@ angular.module("Player", ["Articles", "Config"])
   .factory("Player", function (Articles, Config, $window, $rootScope) {
 
     var start = Date.now();
+    var chunks = [];
+    var count = 0;
+    var playing = false;
 
     return {
-      chunks: [],
-      playing: false,
-      count: 0,
       words: "",
 
       animate: function (timestamp) {
@@ -115,16 +115,16 @@ angular.module("Player", ["Articles", "Config"])
         var now = Date.now();
 
         if (now - start > 60000 / (+Config.wpm / +Config.wordSize )) {
-          this.words = this.chunks[this.count];
+          this.words = chunks[count];
           $rootScope.$apply();
-          this.count++;
+          count++;
           start = now;
         }
         
-        if (this.playing) {
+        if (playing) {
           $window.requestAnimationFrame(this.animate.bind(this));
-          if (this.count >= this.chunks.length) {
-            this.count = 0;
+          if (count >= chunks.length) {
+            count = 0;
             this.stop();
           }
         }
@@ -132,22 +132,22 @@ angular.module("Player", ["Articles", "Config"])
       },
 
       start: function () {
-        if (!this.playing) {
-          this.playing = true;
+        if (!playing) {
+          playing = true;
           $window.requestAnimationFrame(this.animate.bind(this));
         }
       },
 
       stop: function () {
-        if (this.playing) {
-          this.playing = false;
+        if (playing) {
+          playing = false;
           $window.cancelAnimationFrame(this.animate.bind(this));
         }
       },
 
       generateWords: function () {
         angular.forEach(Articles.articles, function (article, key) {
-          this.chunks = this.chunks.concat(wordify.chunk(article.text, +Config.wordSize));
+          chunks = chunks.concat(wordify.chunk(article.text, +Config.wordSize));
         }.bind(this));
       },
 
