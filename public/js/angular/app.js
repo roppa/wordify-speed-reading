@@ -23,10 +23,6 @@ angular.module("wordify.controllers", [])
       url: ""
     };
 
-    $scope.submitUrl = function () {
-
-    };
-
   }])
 
   .controller("InputController", function ($scope) {
@@ -107,60 +103,58 @@ angular.module("Player", ["Articles", "Config"])
   .factory("Player", function (Articles, Config, $window, $rootScope) {
 
     var start = Date.now();
-    var player = {};
 
-    player.chunks = [];
+    return {
+      chunks: [],
+      playing: false,
+      count: 0,
+      words: "",
 
-    player.playing = false;
-    player.count = 0;
-    player.words = "";
+      animate: function (timestamp) {
 
+        var now = Date.now();
 
-    player.animate = function (timestamp) {
-
-      var now = Date.now();
-
-      if (now - start > 60000 / (+Config.wpm / +Config.wordSize )) {
-        player.words = player.chunks[player.count];
-        $rootScope.$apply();
-        player.count++;
-        start = now;
-      }
-      
-      if (player.playing) {
-        $window.requestAnimationFrame(player.animate);
-        if (player.count >= player.chunks.length) {
-          player.count = 0;
-          player.stop();
+        if (now - start > 60000 / (+Config.wpm / +Config.wordSize )) {
+          this.words = this.chunks[this.count];
+          $rootScope.$apply();
+          this.count++;
+          start = now;
         }
+        
+        if (this.playing) {
+          $window.requestAnimationFrame(this.animate.bind(this));
+          if (this.count >= this.chunks.length) {
+            this.count = 0;
+            this.stop();
+          }
+        }
+
+      },
+
+      start: function () {
+        if (!this.playing) {
+          this.playing = true;
+          $window.requestAnimationFrame(this.animate.bind(this));
+        }
+      },
+
+      stop: function () {
+        if (this.playing) {
+          this.playing = false;
+          $window.cancelAnimationFrame(this.animate.bind(this));
+        }
+      },
+
+      generateWords: function () {
+        angular.forEach(Articles.articles, function (article, key) {
+          this.chunks = this.chunks.concat(wordify.chunk(article.text, +Config.wordSize));
+        }.bind(this));
+      },
+
+      setFontSize: function (size) {
+        this.fontSize = size + 'rem';
       }
 
     };
-
-    player.start = function () {
-      if (!player.playing) {
-        player.playing = true;
-        $window.requestAnimationFrame(player.animate);
-      }
-    };
-
-    player.stop = function () {
-      if (player.playing) {
-        player.playing = false;
-        $window.cancelAnimationFrame(player.animate);
-      }
-    };
-
-    player.generateWords = function () {
-      angular.forEach(Articles.articles, function (article, key) {
-        player.chunks = player.chunks.concat(wordify.chunk(article.text, +Config.wordSize));
-      });
-    };
-
-    player.setFontSize = function (size) {
-      player.fontSize = size + 'rem';
-    };
-
-    return player;
 
   });
