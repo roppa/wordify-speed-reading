@@ -11,7 +11,7 @@ body {
   clip: rect(0, 0, 0, 0);
 }
 
-input[type="url"], textarea {
+input[type="url"], input[type="text"], textarea {
   font-size: 1.2rem;
   padding: 0.5rem;
   width: 25rem;

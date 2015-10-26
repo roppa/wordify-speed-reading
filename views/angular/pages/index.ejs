@@ -28,11 +28,18 @@
     <button class="add" ng-click="add()">+</button>
   </script>
 
+  <script type="text/ng-template" id="url-input.html">
+    <form name="urlInputForm">
+      <label for="url">Url</label>
+      <input type="url" name="url" ng-model="article.url" id="url" required placeholder="Enter a url" />
+      <div ng-show="urlInputForm.url.$error.url">You must enter a valid url</div>
+    </form>
+  </script>
+
   <script type="text/ng-template" id="form.html">
     <div id="message"></div>
     <div class="formrow" ng-controller="ArticleUrlController">
-      <label for="url">Url</label>
-      <input type="url" id="url" ng-model="article.url" required placeholder="Enter a url" />
+      <url-input ng-model="article" />
     </div>
     <p>Or</p>
     <div ng-controller="ArticleTextController">

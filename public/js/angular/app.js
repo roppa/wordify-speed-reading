@@ -4,7 +4,7 @@
 // App
 ///////////////////////////////////////////////////////////
 
-var app = angular.module("wordifyApp", ["wordify.controllers", "Articles", "Config", "Player"]);
+var app = angular.module("wordifyApp", ["wordify.controllers", "Articles", "Config", "Player", "Directives"]);
 
 app.run(function ($rootScope, Config, Articles) {
   $rootScope.articles = Articles.articles;
@@ -19,13 +19,13 @@ angular.module("wordify.controllers", [])
 
   .controller("ArticleUrlController", ['$scope', function ($scope) {
 
-    $scope.article = {
-      url: ""
-    };
-
   }])
 
   .controller("InputController", function ($scope) {
+
+    $scope.article = {
+      url: ""
+    };
 
   })
 
@@ -157,4 +157,47 @@ angular.module("Player", ["Articles", "Config"])
 
     };
 
+  });
+
+angular.module("Directives", [])
+  .directive("urlInput", function (Articles, Player, $http) {
+    return {
+      require: 'ngModel',
+      restrict: "E",
+      transclude: true,
+      templateUrl: 'url-input.html',
+      link: function (scope, element, attributes, model) {
+
+        var valid = false;
+
+        element.bind("keydown keypress", function (event) {
+
+          scope.$watch('urlInputForm.url.$valid', function(validity) {
+            valid = validity;
+          });
+
+          if(event.which === 13) {
+            if (valid) {
+              $http({
+                method: 'POST',
+                url: '/api/',
+                data: { "url" : url.value }
+              }).then(function successCallback(response) {
+                  Articles.articles.push({ url: url.value, text: response.data.data, meta: wordify.stats(response.text) });
+                  url.value = "";
+                  scope.config.editMode = false;
+                  Player.generateWords();
+                }, function errorCallback(response) {
+                  console.log("Error", response);
+                });
+
+            } else {
+              
+            }
+            event.preventDefault();
+          }
+        }); //bind
+
+      }
+    }
   });
