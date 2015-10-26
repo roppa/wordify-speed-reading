@@ -168,16 +168,10 @@ angular.module("Directives", [])
       templateUrl: 'url-input.html',
       link: function (scope, element, attributes, model) {
 
-        var valid = false;
-
         element.bind("keydown keypress", function (event) {
 
-          scope.$watch('urlInputForm.url.$valid', function(validity) {
-            valid = validity;
-          });
-
           if(event.which === 13) {
-            if (valid) {
+            if (scope.urlInputForm.url.$valid) {
               $http({
                 method: 'POST',
                 url: '/api/',
