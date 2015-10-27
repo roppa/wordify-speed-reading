@@ -24,16 +24,13 @@ angular.module("wordify.controllers", [])
   .controller("InputController", function ($scope) {
 
     $scope.article = {
-      url: ""
+      url: "",
+      text: ""
     };
 
   })
 
   .controller("ArticleTextController", function ($scope, Articles, Player) {
-
-    $scope.article = {
-      text: ""
-    };
 
     $scope.submitText = function (e) {
       if ($scope.article.text !== "") {
@@ -167,9 +164,7 @@ angular.module("Directives", [])
       transclude: true,
       templateUrl: 'url-input.html',
       link: function (scope, element, attributes, model) {
-
         element.bind("keydown keypress", function (event) {
-
           if(event.which === 13) {
             if (scope.urlInputForm.url.$valid) {
               $http({
@@ -177,10 +172,16 @@ angular.module("Directives", [])
                 url: '/api/',
                 data: { "url" : url.value }
               }).then(function successCallback(response) {
-                  Articles.articles.push({ url: url.value, text: response.data.data, meta: wordify.stats(response.text) });
-                  url.value = "";
-                  scope.config.editMode = false;
-                  Player.generateWords();
+                console.log(response)
+                  if (response.data.error) {
+                    scope.article.error = response.data.error;
+                    scope.article.text = response.data.data;
+                  } else {
+                    Articles.articles.push({ url: url.value, text: response.data.data, meta: wordify.stats(response.text) });
+                    url.value = "";
+                    scope.config.editMode = false;
+                    Player.generateWords();
+                  }
                 }, function errorCallback(response) {
                   console.log("Error", response);
                 });

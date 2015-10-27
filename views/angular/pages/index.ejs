@@ -30,9 +30,10 @@
 
   <script type="text/ng-template" id="url-input.html">
     <form name="urlInputForm">
+      <div ng-show="urlInputForm.url.$error.url">You must enter a valid url</div>
+      <div ng-show="article.error">{{article.error}}</div>
       <label for="url">Url</label>
       <input type="url" name="url" ng-model="article.url" id="url" required placeholder="Enter a url" />
-      <div ng-show="urlInputForm.url.$error.url">You must enter a valid url</div>
     </form>
   </script>
 
@@ -45,7 +46,7 @@
     <div ng-controller="ArticleTextController">
       <div class="formrow">
         <label for="copy">Text</label>
-        <textarea name="copy" ng-model="article.text" id="copy" placeholder="Paste text"></textarea>
+        <textarea name="copy" ng-model="article.text" id="copy" placeholder="Paste text">{{article.text}}</textarea>
       </div>
       <div class="formrow"><button ng-click="submitText()">Add text</button></div>
     </div>
