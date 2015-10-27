@@ -8,7 +8,6 @@ var app = angular.module("wordifyApp", ["wordify.controllers", "Articles", "Conf
 
 app.run(function ($rootScope, Config, Articles) {
   $rootScope.articles = Articles.articles;
-  $rootScope.config = Config;
 });
 
 ///////////////////////////////////////////////////////////
@@ -21,16 +20,20 @@ angular.module("wordify.controllers", [])
 
   }])
 
-  .controller("InputController", function ($scope) {
+  .controller("InputController", function ($scope, Config) {
 
     $scope.article = {
       url: "",
       text: ""
     };
 
+    $scope.config = Config;
+
   })
 
-  .controller("ArticleTextController", function ($scope, Articles, Player) {
+  .controller("ArticleTextController", function ($scope, Articles, Player, Config) {
+
+    $scope.config = Config;
 
     $scope.submitText = function (e) {
       if ($scope.article.text !== "") {
@@ -62,13 +65,14 @@ angular.module("wordify.controllers", [])
 
   })
 
-  .controller("PlayerController", function ($rootScope, $scope, Player) {
+  .controller("PlayerController", function ($scope, Player, Config) {
 
     $scope.player = Player;
-    $scope.player.setFontSize($rootScope.config.fontSize);
+    $scope.player.setFontSize(Config.fontSize);
+    $scope.config = Config;
 
     $scope.$watch(function () {
-      return $rootScope.config.fontSize; 
+      return Config.fontSize;
     }, function (newValue, oldValue) {
       if (newValue !== oldValue) {
         $scope.player.setFontSize(newValue);
@@ -76,7 +80,7 @@ angular.module("wordify.controllers", [])
     });
 
     $scope.$watch(function () {
-      return $rootScope.config.wordSize; 
+      return Config.wordSize;
     }, function (newValue, oldValue) {
       if (newValue !== oldValue) {
         $scope.player.generateWords();
@@ -85,12 +89,26 @@ angular.module("wordify.controllers", [])
 
   })
 
-  .controller("ConfigController", function ($scope, Player) {
+  .controller("ConfigController", function ($scope, Config) {
+    $scope.config = Config;
 
-    $scope.generateWords = function (size) {
-      console.log("test", size);
-      Player.generateWords;
-    };
+    $scope.$watch(function () {
+      return Config.wordSize;
+    }, function (newValue, oldValue) {
+      if (newValue !== oldValue) {
+        Config.wordSize = newValue;
+        Config.save();
+      }
+    });
+
+    $scope.$watch(function () {
+      return Config.wpm;
+    }, function (newValue, oldValue) {
+      if (newValue !== oldValue) {
+        Config.wpm = newValue;
+        Config.save();
+      }
+    });
 
   });
 
@@ -105,12 +123,27 @@ angular.module('Articles', [])
 
 angular.module('Config', [])
   .factory('Config', function () {
-    return {
+
+    var localStorageConfig = localStorage.getItem("config");
+    if (localStorageConfig) {
+      localStorageConfig = JSON.parse(localStorageConfig);
+    }
+
+    var config = localStorageConfig || {
+      type: "chunk",
+      wave: [20, 30, 40],
       wpm: 300,
       wordSize: 1,
       fontSize: 2.5,
       editMode: true
-    }
+    };
+
+    config.save = function () {
+      localStorage.setItem("config", JSON.stringify(config));
+    };
+
+    return config;
+
   });
 
 angular.module("Player", ["Articles", "Config"])
@@ -176,8 +209,12 @@ angular.module("Player", ["Articles", "Config"])
 
   });
 
+///////////////////////////////////////////////////////////
+// Directives
+///////////////////////////////////////////////////////////
+
 angular.module("Directives", [])
-  .directive("urlInput", function (Articles, Player, $http) {
+  .directive("urlInput", function (Articles, Player, $http, $window) {
     return {
       require: 'ngModel',
       restrict: "E",
@@ -196,10 +233,13 @@ angular.module("Directives", [])
                     scope.article.error = response.data.error;
                     scope.article.text = response.data.data;
                     url.value = "";
+                    $window.setTimeout(function () {
+                      scope.article.error = "";
+                    }, 2000);
                   } else {
                     Articles.articles.push({ url: url.value, text: response.data.data, meta: wordify.stats(response.text) });
                     url.value = "";
-                    scope.config.editMode = false;
+                    Config.editMode = false;
                     Player.generateWords();
                   }
                 }, function errorCallback(response) {
