@@ -172,7 +172,6 @@ angular.module("Directives", [])
                 url: '/api/',
                 data: { "url" : url.value }
               }).then(function successCallback(response) {
-                console.log(response)
                   if (response.data.error) {
                     scope.article.error = response.data.error;
                     scope.article.text = response.data.data;
@@ -183,7 +182,7 @@ angular.module("Directives", [])
                     Player.generateWords();
                   }
                 }, function errorCallback(response) {
-                  console.log("Error", response);
+                  scope.article.error = response;
                 });
 
             } else {
