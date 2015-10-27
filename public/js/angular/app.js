@@ -75,9 +75,22 @@ angular.module("wordify.controllers", [])
       }
     });
 
+    $scope.$watch(function () {
+      return $rootScope.config.wordSize; 
+    }, function (newValue, oldValue) {
+      if (newValue !== oldValue) {
+        $scope.player.generateWords();
+      }
+    });
+
   })
 
-  .controller("ConfigController", function ($scope) {
+  .controller("ConfigController", function ($scope, Player) {
+
+    $scope.generateWords = function (size) {
+      console.log("test", size);
+      Player.generateWords;
+    };
 
   });
 
@@ -147,6 +160,9 @@ angular.module("Player", ["Articles", "Config"])
       },
 
       generateWords: function () {
+        chunks = [];
+        this.stop();
+        count = 0;
         angular.forEach(Articles.articles, function (article, key) {
           chunks = chunks.concat(wordify.chunk(article.text, +Config.wordSize));
         }.bind(this));
