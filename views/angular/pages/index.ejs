@@ -23,7 +23,7 @@
 
   <script type="text/ng-template" id="list.html">
     <ul>
-      <li ng-repeat="article in articles track by $index" ng-click="remove($index)">{{ article.url }}</li>
+      <li ng-repeat="article in articles track by $index" ng-click="remove($index)" ng-bind-html="truncate(article.url)"></li>
     </ul>
     <button class="add" ng-click="add()">+</button>
   </script>

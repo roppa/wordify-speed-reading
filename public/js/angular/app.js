@@ -43,7 +43,7 @@ angular.module("wordify.controllers", [])
 
   })
 
-  .controller("ListController", function ($scope) {
+  .controller("ListController", function ($scope, $sce) {
 
     $scope.remove = function (index) {
       $scope.articles.splice(index, 1);
@@ -54,6 +54,10 @@ angular.module("wordify.controllers", [])
 
     $scope.add = function () {
       $scope.config.editMode = true;
+    };
+
+    $scope.truncate = function (url) {
+      return $sce.trustAsHtml(url.substring(0, 20) + '&hellip;');
     };
 
   })
