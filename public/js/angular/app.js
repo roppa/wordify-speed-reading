@@ -179,6 +179,7 @@ angular.module("Directives", [])
                   if (response.data.error) {
                     scope.article.error = response.data.error;
                     scope.article.text = response.data.data;
+                    url.value = "";
                   } else {
                     Articles.articles.push({ url: url.value, text: response.data.data, meta: wordify.stats(response.text) });
                     url.value = "";
