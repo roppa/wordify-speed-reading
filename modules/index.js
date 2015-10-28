@@ -3,7 +3,8 @@ var router = express.Router();
 
 var engines = {
   "backbone" : "backbone",
-  "angular" : "angular"
+  "angular" : "angular",
+  "react" : "react"
 };
 
 /* GET home page. */
